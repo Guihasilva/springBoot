@@ -47,6 +47,10 @@ public class AnimeService {
         return animeRepository.save(anime);
     }
 
+    public List<Anime> findByName (String name){
+        return animeRepository.findByName(name);
+    }
+
     public void delete(long id){
         findByIdOrGetThrowBadRequestException(id);
         animeRepository.deleteById(id);
