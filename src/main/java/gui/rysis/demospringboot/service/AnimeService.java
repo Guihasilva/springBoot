@@ -1,12 +1,14 @@
 package gui.rysis.demospringboot.service;
 
 import gui.rysis.demospringboot.domain.Anime;
+import gui.rysis.demospringboot.mapper.AnimeMapper;
 import gui.rysis.demospringboot.repository.AnimeRepository;
 import gui.rysis.demospringboot.requests.AnimePostRequestBody;
 import gui.rysis.demospringboot.requests.AnimePutRequestBody;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AnimeService {
     //Variables
     private final AnimeRepository animeRepository;
-
+    private final AnimeMapper modelMapper;
     public  List<Anime> listAll(){
         return animeRepository.findAll();
     }
@@ -33,11 +35,16 @@ public class AnimeService {
        return animeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Id not found"));
     }
 
+//    public Anime save (AnimePostRequestBody animePostRequestBody){
+//        Anime anime = Anime.builder()
+//                .name(animePostRequestBody.getName())
+//                .build();
+//       return animeRepository.save(anime);
+//    }
+
     public Anime save (AnimePostRequestBody animePostRequestBody){
-        Anime anime = Anime.builder()
-                .name(animePostRequestBody.getName())
-                .build();
-       return animeRepository.save(anime);
+        Anime anime = modelMapper.toAnime(animePostRequestBody);
+        return animeRepository.save(anime);
     }
 
     public void delete(long id){
@@ -48,11 +55,8 @@ public class AnimeService {
 
     public void replace (AnimePutRequestBody animePutRequestBody){
         findByIdOrGetThrowBadRequestException(animePutRequestBody.getId());
-
-        Anime anime = Anime.builder()
-                .name(animePutRequestBody.getName())
-                .id(animePutRequestBody.getId())
-                .build();
+        Anime anime = modelMapper.toAnime(animePutRequestBody);
+        anime.setId(animePutRequestBody.getId());
         animeRepository.save(anime);
     }
 }
