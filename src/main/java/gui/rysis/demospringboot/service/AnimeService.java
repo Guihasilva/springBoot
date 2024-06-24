@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,8 @@ public class AnimeService {
     //Variables
     private final AnimeRepository animeRepository;
     private final AnimeMapper modelMapper;
-    public  List<Anime> listAll(){
-        return animeRepository.findAll();
+    public Page<Anime> listAll(Pageable pageable){
+        return animeRepository.findAll(pageable);
     }
 
 
