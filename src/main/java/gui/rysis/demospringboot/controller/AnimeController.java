@@ -7,6 +7,7 @@ import gui.rysis.demospringboot.requests.AnimePostRequestBody;
 import gui.rysis.demospringboot.requests.AnimePutRequestBody;
 import gui.rysis.demospringboot.service.AnimeService;
 import gui.rysis.demospringboot.util.DateUtil;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class AnimeController {
     }
 
     @PostMapping
-    public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody) {
+    public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody) {
         animeService.save(animePostRequestBody);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -59,7 +60,7 @@ public class AnimeController {
     }
 
     @PutMapping()
-    public ResponseEntity<Void> replace(@RequestBody AnimePutRequestBody animePutRequestBody) {
+    public ResponseEntity<Void> replace(@RequestBody @Valid AnimePutRequestBody animePutRequestBody) {
         animeService.replace(animePutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
